@@ -61,6 +61,17 @@ def success(request):
     print(request.session['user_id'])
     return render(request, "wall_temps/success.html", context)
 
+def populars(request):
+    if 'user_id' not in request.session:
+        return redirect('/')
+    context = {
+        "messages" : Message.objects.order_by("like_count"),
+        "users" : User.objects.all(),
+        "comments" : Comment.objects.all()
+    }
+    print(request.session['user_id'])
+    return render(request, "wall_temps/populars.html", context)
+
 def logout(request):
     request.session.clear()    
     return redirect('/')
@@ -74,6 +85,7 @@ def like(request, id):
     this_msg = Message.objects.get(id=id)
     this_msg.likes.add(this_user)
     this_msg.like_count += 1
+    this_msg.save()
     return redirect('/success')
 
 def del_msg(request, id):

@@ -1,31 +1,25 @@
 <!doctype html>
 <html>
 <head>
-    <title>Dojo Secrets</title>
+    <title>Popular Secrets</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'wall_css/style.css' %}">
 </head>
 <body>
     <div class="container">
-        <h1>Welcome Ninja to  the Dojo 的秘密, I see you are {{ request.session.first_name }} {{ request.session.last_name }}</h1>
+        <h1>Welcome Ninja to  the popular 的秘密, I see you are {{ request.session.first_name }} {{ request.session.last_name }}</h1>
         <form class="inline" action="/logout" method="">
             {% csrf_token %}
                 <input type='submit' value='Logout'>
         </form>
-        <h2>Tell us a secret!</h2>
-        <form action="/success/post_msg" method="POST">
-            {% csrf_token %}
-                <textarea name="msg" id="" cols="100" rows="10"></textarea>
-                <input type="submit" value = "Post a secret">
-        </form>
-        <a href="/success/populars">Checkout messages all the cool Ninjas liked</a>
+        <h2>These are the most popular messages!</h2>
     </div>
         {% for i in messages reversed %}
         <div class="container">
             <h2>{{ i.user.first_name }} {{ i.user.last_name }}</h2>
             <h3>{{ i.created_at }}</h3>
+            <h3>{{ i.like_count }} likes</h3>
             <p>{{ i.msg }}</p>
-            <a href="/{{i.id}}/del_msg">Delete secret</a>
             <form action="/{{i.id}}/like" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name = "user_id" value = "{{ request.session.user_id }}">
