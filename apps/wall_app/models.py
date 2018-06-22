@@ -36,22 +36,12 @@ class User(models.Model):
 
 class Message(models.Model):
     user = models.ForeignKey(User, related_name="post_msgs")
-    msg = models.TextField(max_length=1000)
-    likes = models.ManyToManyField(User, related_name = "likes_msg")
-    like_count = models.IntegerField(default = 0)
+    name = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now = True)
     updated_at = models.DateTimeField(auto_now_add = True)
     def __repr__(self):
         return "<msg: {} | {} {}>".format(self.id, self.user, self.msg)
 
-class Comment(models.Model):
-    user = models.ForeignKey(User, related_name="post_comnts")
-    msg = models.ForeignKey(Message, related_name="get_comnts")
-    comnt = models.TextField(max_length=1000)
-    created_at = models.DateTimeField(auto_now = True)
-    updated_at = models.DateTimeField(auto_now_add = True)
-    def __repr__(self):
-        return "<cmnt: {} | {} {}>".format(self.id, self.user, self.msg)
-
-
-# Create your models here.
+class List(models.Model):
+    user = models.OneToOneField(User)
+    items = models.ManyToManyField(Message, blank=True)
